@@ -1,0 +1,777 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>كل سنة وانت طيب يا بابا | Happy Birthday Dad</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Cairo:wght@400;600;700;800&family=Playfair+Display:ital,wght@0,600;0,700;1,500&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+  <style>
+    :root {
+      --bg-dark: #16110e;
+      --leather-base: #2a1d17;
+      --leather-dark: #1d130f;
+      --gold: #d4af37;
+      --gold-light: #f3e5ab;
+      --gold-dim: rgba(212, 175, 55, 0.25);
+      --paper: #fdfaf3;
+      --paper-lines: rgba(180, 155, 120, 0.16);
+      --ink: #2b211a;
+      --ink-soft: #5c4b3e;
+      --accent-warm: #8b3a2b;
+      --shadow-book: 0 25px 60px rgba(0, 0, 0, 0.65), 0 8px 20px rgba(0, 0, 0, 0.45);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      min-height: 100dvh;
+      background: radial-gradient(circle at 50% 25%, #2c2019 0%, #120d0a 100%);
+      color: var(--ink);
+      font-family: 'Cairo', sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      overflow-x: hidden;
+      padding: 14px;
+      position: relative;
+    }
+
+    body.lang-en {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+    }
+
+    /* Ambient floating gold dust */
+    #particles-canvas {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    /* Top Floating Bar */
+    .top-bar {
+      position: relative;
+      z-index: 20;
+      width: 100%;
+      max-width: 480px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+      padding: 0 4px;
+    }
+
+    .badge-dad {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(212, 175, 55, 0.12);
+      border: 1px solid var(--gold-dim);
+      color: var(--gold-light);
+      padding: 6px 14px;
+      border-radius: 999px;
+      font-size: 0.82rem;
+      font-weight: 700;
+      backdrop-filter: blur(8px);
+    }
+
+    .lang-toggle {
+      background: linear-gradient(135deg, #3a2920, #231812);
+      border: 1px solid var(--gold);
+      color: var(--gold-light);
+      padding: 6px 14px;
+      border-radius: 999px;
+      font-size: 0.82rem;
+      font-weight: 700;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .lang-toggle:active {
+      transform: scale(0.95);
+    }
+
+    /* Notebook Stage */
+    .notebook-wrapper {
+      position: relative;
+      z-index: 10;
+      width: 100%;
+      max-width: 480px;
+      perspective: 1800px;
+    }
+
+    /* Leather Cover Screen */
+    .cover-card {
+      background:
+        radial-gradient(circle at 30% 20%, rgba(255, 255, 255, 0.06), transparent 60%),
+        repeating-linear-gradient(45deg, rgba(0,0,0,0.06) 0px, rgba(0,0,0,0.06) 2px, transparent 2px, transparent 6px),
+        linear-gradient(145deg, var(--leather-base), var(--leather-dark));
+      border-radius: 18px 24px 24px 18px;
+      border: 2px solid #4a3525;
+      box-shadow: var(--shadow-book), inset 10px 0 22px rgba(0,0,0,0.55);
+      padding: 36px 26px;
+      text-align: center;
+      color: var(--gold-light);
+      position: relative;
+      overflow: hidden;
+      min-height: 540px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      align-items: center;
+      transition: opacity 0.6s ease, transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    /* Book Spine Effect */
+    .cover-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      right: 16px;
+      width: 3px;
+      background: linear-gradient(to bottom, transparent, rgba(0,0,0,0.6), transparent);
+      box-shadow: -2px 0 4px rgba(255,255,255,0.06);
+    }
+
+    body.lang-en .cover-card::before {
+      right: auto;
+      left: 16px;
+    }
+
+    /* Gold Frame on Cover */
+    .gold-border-frame {
+      position: absolute;
+      inset: 14px;
+      border: 1.5px solid var(--gold-dim);
+      border-radius: 12px 18px 18px 12px;
+      pointer-events: none;
+    }
+
+    .cover-crown {
+      font-size: 2.6rem;
+      filter: drop-shadow(0 4px 12px rgba(212, 175, 55, 0.45));
+      animation: floatGentle 3.5s ease-in-out infinite;
+    }
+
+    @keyframes floatGentle {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-7px); }
+    }
+
+    .cover-title {
+      font-family: 'Amiri', serif;
+      font-size: 2.35rem;
+      font-weight: 700;
+      line-height: 1.3;
+      background: linear-gradient(135deg, #f9eebc 0%, #d4af37 50%, #f3e5ab 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin: 10px 0;
+      text-shadow: 0 2px 10px rgba(212, 175, 55, 0.15);
+    }
+
+    body.lang-en .cover-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 2.15rem;
+    }
+
+    .cover-subtitle {
+      font-size: 1rem;
+      color: #dfd0be;
+      line-height: 1.75;
+      max-width: 330px;
+      opacity: 0.92;
+    }
+
+    /* Wax Seal Button */
+    .wax-seal-btn {
+      position: relative;
+      background: radial-gradient(circle at 35% 30%, #b8432e, #7a2315 75%, #54140a 100%);
+      color: #f9e6b3;
+      border: 2px solid rgba(243, 229, 171, 0.45);
+      padding: 15px 32px;
+      border-radius: 999px;
+      font-family: inherit;
+      font-size: 1.05rem;
+      font-weight: 800;
+      cursor: pointer;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5), inset 0 2px 6px rgba(255, 255, 255, 0.25);
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      transition: all 0.25s ease;
+      animation: pulseGlow 2.4s infinite;
+    }
+
+    @keyframes pulseGlow {
+      0%, 100% { box-shadow: 0 10px 25px rgba(0,0,0,0.5), 0 0 0 0 rgba(212, 175, 55, 0.4); }
+      50% { box-shadow: 0 10px 25px rgba(0,0,0,0.5), 0 0 0 10px rgba(212, 175, 55, 0); }
+    }
+
+    .wax-seal-btn:active {
+      transform: scale(0.96);
+    }
+
+    /* Inside Notebook Pages */
+    .notebook-interior {
+      display: none;
+      background: var(--paper);
+      background-image: repeating-linear-gradient(
+        to bottom,
+        transparent 0px,
+        transparent 31px,
+        var(--paper-lines) 32px
+      );
+      border-radius: 16px 22px 22px 16px;
+      box-shadow: var(--shadow-book), inset 0 0 40px rgba(185, 155, 115, 0.18);
+      border: 6px solid #2c1e17;
+      min-height: 575px;
+      position: relative;
+      overflow: hidden;
+      flex-direction: column;
+      justify-content: space-between;
+      animation: openBookAnim 0.65s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+    }
+
+    @keyframes openBookAnim {
+      from { opacity: 0; transform: scale(0.93) rotateY(-8deg); }
+      to { opacity: 1; transform: scale(1) rotateY(0deg); }
+    }
+
+    /* Spiral / Binding Dots */
+    .binding-strip {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      right: 0;
+      width: 24px;
+      background: linear-gradient(to left, rgba(44, 30, 23, 0.14), transparent);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-evenly;
+      align-items: center;
+      pointer-events: none;
+      z-index: 5;
+    }
+
+    body.lang-en .binding-strip {
+      right: auto;
+      left: 0;
+      background: linear-gradient(to right, rgba(44, 30, 23, 0.14), transparent);
+    }
+
+    .ring-hole {
+      width: 9px;
+      height: 9px;
+      border-radius: 50%;
+      background: #2c1e17;
+      box-shadow: inset 0 1px 2px rgba(0,0,0,0.6), 0 1px 1px rgba(255,255,255,0.6);
+    }
+
+    /* Page Header */
+    .page-header {
+      padding: 18px 26px 10px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1.5px dashed rgba(139, 58, 43, 0.25);
+    }
+
+    .page-tag {
+      font-size: 0.78rem;
+      font-weight: 800;
+      color: var(--accent-warm);
+      letter-spacing: 0.4px;
+      text-transform: uppercase;
+    }
+
+    .page-counter {
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: var(--ink-soft);
+      background: rgba(212, 175, 55, 0.18);
+      padding: 3px 10px;
+      border-radius: 999px;
+    }
+
+    /* Page Content Area */
+    .pages-container {
+      flex: 1;
+      padding: 18px 28px 14px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .page-slide {
+      display: none;
+      flex-direction: column;
+      gap: 14px;
+      animation: pageTurnIn 0.45s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+    }
+
+    .page-slide.active {
+      display: flex;
+    }
+
+    @keyframes pageTurnIn {
+      from { opacity: 0; transform: translateX(-14px); }
+      to { opacity: 1; transform: translateX(0); }
+    }
+
+    body.lang-en @keyframes pageTurnIn {
+      from { opacity: 0; transform: translateX(14px); }
+      to { opacity: 1; transform: translateX(0); }
+    }
+
+    .section-heading {
+      font-family: 'Amiri', serif;
+      font-size: 1.65rem;
+      font-weight: 700;
+      color: #241710;
+      line-height: 1.3;
+    }
+
+    body.lang-en .section-heading {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.5rem;
+    }
+
+    .letter-body {
+      font-size: 1.02rem;
+      line-height: 2;
+      color: var(--ink);
+      font-weight: 500;
+    }
+
+    .highlight-quote {
+      background: linear-gradient(135deg, rgba(212, 175, 55, 0.14), rgba(139, 58, 43, 0.08));
+      border-right: 3.5px solid var(--accent-warm);
+      padding: 12px 15px;
+      border-radius: 10px;
+      font-weight: 700;
+      color: #3d2419;
+      font-size: 0.96rem;
+      line-height: 1.75;
+    }
+
+    body.lang-en .highlight-quote {
+      border-right: none;
+      border-left: 3.5px solid var(--accent-warm);
+    }
+
+    .signature-box {
+      margin-top: 4px;
+      text-align: left;
+      font-family: 'Amiri', serif;
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: var(--accent-warm);
+    }
+
+    body.lang-en .signature-box {
+      text-align: right;
+      font-family: 'Playfair Display', serif;
+      font-style: italic;
+    }
+
+    /* Polaroid Photo Gallery */
+    .polaroid-stack {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      max-height: 390px;
+      overflow-y: auto;
+      padding: 4px 4px 12px;
+      scrollbar-width: thin;
+      scrollbar-color: var(--gold) transparent;
+    }
+
+    .polaroid-card {
+      background: #ffffff;
+      padding: 10px 10px 16px;
+      border-radius: 6px;
+      box-shadow: 0 8px 20px rgba(43, 33, 26, 0.14);
+      border: 1px solid rgba(0, 0, 0, 0.06);
+      transition: transform 0.3s ease;
+    }
+
+    .polaroid-card:nth-child(1) { transform: rotate(-1.2deg); }
+    .polaroid-card:nth-child(2) { transform: rotate(1.1deg); }
+    .polaroid-card:nth-child(3) { transform: rotate(-0.8deg); }
+
+    .polaroid-card:hover {
+      transform: rotate(0deg) scale(1.015);
+    }
+
+    .photo-frame {
+      width: 100%;
+      aspect-ratio: 4 / 3;
+      border-radius: 4px;
+      overflow: hidden;
+      background: #efe7d8;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .photo-frame img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .photo-fallback {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 16px;
+      color: var(--ink-soft);
+      gap: 6px;
+    }
+
+    .photo-caption {
+      margin-top: 10px;
+      text-align: center;
+      font-size: 0.92rem;
+      font-weight: 700;
+      color: #2f231b;
+    }
+
+    /* QR & Song Experience */
+    .song-card {
+      background: linear-gradient(145deg, #281b15, #1b120e);
+      color: var(--gold-light);
+      border-radius: 16px;
+      padding: 18px;
+      border: 1.5px solid var(--gold-dim);
+      box-shadow: 0 12px 28px rgba(0, 0, 0, 0.25);
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .vinyl-row {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 14px;
+      margin-bottom: 14px;
+    }
+
+    .vinyl-disc {
+      width: 54px;
+      height: 54px;
+      border-radius: 50%;
+      background:
+        radial-gradient(circle, var(--gold) 0%, var(--gold) 18%, #111 20%, #2b2b2b 45%, #111 47%, #222 70%, #000 100%);
+      border: 2px solid var(--gold);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+      flex-shrink: 0;
+    }
+
+    .vinyl-disc.spinning {
+      animation: spinVinyl 3.2s linear infinite;
+    }
+
+    @keyframes spinVinyl {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+
+    .song-meta {
+      text-align: right;
+    }
+
+    body.lang-en .song-meta {
+      text-align: left;
+    }
+
+    .song-title {
+      font-size: 1.05rem;
+      font-weight: 800;
+      color: #fff;
+    }
+
+    .song-artist {
+      font-size: 0.85rem;
+      color: var(--gold);
+      font-weight: 600;
+    }
+
+    /* QR Scanner Box */
+    .qr-scanner-box {
+      position: relative;
+      width: 172px;
+      height: 172px;
+      margin: 0 auto 14px;
+      background: #ffffff;
+      padding: 10px;
+      border-radius: 14px;
+      box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.35);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+
+    #qrcode img, #qrcode canvas {
+      width: 150px !important;
+      height: 150px !important;
+    }
+
+    .scan-laser {
+      position: absolute;
+      left: 6px;
+      right: 6px;
+      height: 3px;
+      background: linear-gradient(90deg, transparent, #ff3b30, #ffd60a, #ff3b30, transparent);
+      box-shadow: 0 0 12px #ff3b30;
+      top: 10px;
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .qr-scanner-box.scanning .scan-laser {
+      opacity: 1;
+      animation: laserSweep 1.2s ease-in-out infinite;
+    }
+
+    @keyframes laserSweep {
+      0% { top: 10px; }
+      50% { top: 158px; }
+      100% { top: 10px; }
+    }
+
+    .scan-btn {
+      width: 100%;
+      background: linear-gradient(135deg, #d4af37, #b68d21);
+      color: #1c130d;
+      border: none;
+      padding: 11px 16px;
+      border-radius: 12px;
+      font-family: inherit;
+      font-size: 0.95rem;
+      font-weight: 800;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      box-shadow: 0 6px 16px rgba(212, 175, 55, 0.3);
+      transition: transform 0.2s ease;
+    }
+
+    .scan-btn:active {
+      transform: scale(0.97);
+    }
+
+    .lyrics-snippet {
+      margin-top: 12px;
+      padding-top: 10px;
+      border-top: 1px dashed rgba(212, 175, 55, 0.3);
+      font-family: 'Amiri', serif;
+      font-size: 1.05rem;
+      color: #f6ead4;
+      line-height: 1.7;
+    }
+
+    /* Wishes Cards */
+    .wish-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .wish-item {
+      background: rgba(255, 255, 255, 0.78);
+      border: 1px solid rgba(212, 175, 55, 0.35);
+      border-radius: 12px;
+      padding: 12px 14px;
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      box-shadow: 0 3px 10px rgba(0, 0, 0, 0.04);
+    }
+
+    .wish-icon {
+      font-size: 1.3rem;
+      line-height: 1.4;
+    }
+
+    .wish-text {
+      font-size: 0.95rem;
+      line-height: 1.65;
+      font-weight: 600;
+      color: var(--ink);
+    }
+
+    .celebrate-btn {
+      margin-top: 6px;
+      width: 100%;
+      background: linear-gradient(135deg, #8b3a2b, #5c2217);
+      color: #fdf6e7;
+      border: 1.5px solid var(--gold);
+      padding: 13px;
+      border-radius: 12px;
+      font-family: inherit;
+      font-size: 1rem;
+      font-weight: 800;
+      cursor: pointer;
+      box-shadow: 0 8px 20px rgba(139, 58, 43, 0.28);
+      transition: transform 0.2s ease;
+    }
+
+    .celebrate-btn:active {
+      transform: scale(0.97);
+    }
+
+    /* Bottom Navigation */
+    .nav-footer {
+      padding: 12px 24px 16px;
+      border-top: 1.5px dashed rgba(139, 58, 43, 0.25);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+      background: rgba(253, 250, 243, 0.92);
+    }
+
+    .nav-btn {
+      background: #2c1e17;
+      color: var(--gold-light);
+      border: 1px solid var(--gold-dim);
+      padding: 9px 16px;
+      border-radius: 10px;
+      font-family: inherit;
+      font-size: 0.88rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: opacity 0.2s ease, transform 0.15s ease;
+    }
+
+    .nav-btn:disabled {
+      opacity: 0.35;
+      cursor: default;
+    }
+
+    .nav-btn:not(:disabled):active {
+      transform: scale(0.95);
+    }
+
+    .dots-indicator {
+      display: flex;
+      gap: 6px;
+    }
+
+    .dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: rgba(44, 30, 23, 0.25);
+      transition: all 0.25s ease;
+    }
+
+    .dot.active {
+      width: 20px;
+      border-radius: 999px;
+      background: var(--accent-warm);
+    }
+
+    /* Confetti burst */
+    .confetti-piece {
+      position: fixed;
+      width: 9px;
+      height: 9px;
+      top: -15px;
+      z-index: 999;
+      pointer-events: none;
+      border-radius: 2px;
+      animation: confettiFall 3s ease-out forwards;
+    }
+
+    @keyframes confettiFall {
+      0% { transform: translateY(0) rotate(0deg); opacity: 1; }
+      100% { transform: translateY(105vh) rotate(720deg); opacity: 0; }
+    }
+  </style>
+</head>
+<body>
+  <canvas id="particles-canvas"></canvas>
+
+  <!-- Top Bar -->
+  <div class="top-bar">
+    <div class="badge-dad" id="top-badge">✨ كل سنة وانت طيب يا أغلى بابا</div>
+    <button class="lang-toggle" id="lang-btn" onclick="toggleLanguage()">
+      <span>🌐</span>
+      <span id="lang-btn-text">English</span>
+    </button>
+  </div>
+
+  <!-- Main Notebook Container -->
+  <div class="notebook-wrapper">
+
+    <!-- 1. Leather Cover -->
+    <div class="cover-card" id="cover-screen">
+      <div class="gold-border-frame"></div>
+
+      <div style="margin-top: 12px;">
+        <div class="cover-crown">👑</div>
+        <p style="font-size: 0.85rem; letter-spacing: 1.5px; color: var(--gold); margin-top: 8px; font-weight: 700;" id="cover-kicker">
+          HAPPY BIRTHDAY DAD
+        </p>
+      </div>
+
+      <div>
+        <h1 class="cover-title" id="cover-title">كل سنة وانت<br>سندي وضهري يا بابا</h1>
+        <p class="cover-subtitle" id="cover-sub">
+          شوية ذكريات وكلام من قلبي ليك في يوم عيد ميلادك.. افتح وشوف ❤️
+        </p>
+      </div>
+
+      <button class="wax-seal-btn" onclick="openNotebook()">
+        <span>💌</span>
+        <span id="open-btn-text">افتح الكراسة</span>
+      </button>
+    </div>
+
+    <!-- 2. Inside Notebook -->
+    <div class="notebook-interior" id="notebook-screen">
+      <div class="binding-strip">
+        <div class="ring-hole"></div>
+        <div class="ring-hole"></div>
+        <div class="ring-hole"></div>
+        <div class="ring-hole"></div>
+        <div class="ring-hole"></div>
+        <div class="ring-hole"></div>
+        <div class="ring-hole"></div>
+        <div class="ring-hole"></div>
+      </div>
+
+      <div class="page-header">
+        <span class="page-tag" id="page-tag-label">من بنتك ليك ❤️</span>
+        <span class="page-counter" id="page-counter-label">١ / ٤</span>
+      </div>
+
+      <div class="pages-container" id="touch-area">
+
+        <!-- Page 1: Heartfelt Letter -->
+        <div class="page-slide active" data-page="0">
+          <h2 class="section-heading" id="p1-title">يا أغلى حاجة في
